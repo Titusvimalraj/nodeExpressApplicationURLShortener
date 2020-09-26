@@ -32,7 +32,7 @@ router.post('/urls', async (req, res) => {
 
   try {
     const urlId = shortid.generate();
-    const shortUrl = process.env.APPURL? `${process.env.APPURL}/${urlId}`:`http://localhost:3000/${urlId}`;
+    const shortUrl = process.env.APPURL ? `${process.env.APPURL}/${urlId}`:`http://localhost:3000/${urlId}`;
     const url_ = new Url({ urlId, userId: req.user._id,url, shortUrl});
     await url_.save();
     res.send(url_);
