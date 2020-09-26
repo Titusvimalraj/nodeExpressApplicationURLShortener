@@ -1,0 +1,32 @@
+{
+  "name": "nodeurlshortnener",
+  "version": "1.0.0",
+  "description": "This is a Node application for creating node URL shortener express Application.",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Titusvimalraj/nodeExpressApplicationURLShortener.git"
+  },
+  "keywords": [
+    "Node",
+    "Express",
+    "JWT"
+  ],
+  "author": "Titus Vimal Raj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Titusvimalraj/nodeExpressApplicationURLShortener/issues"
+  },
+  "homepage": "https://github.com/Titusvimalraj/nodeExpressApplicationURLShortener#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.7",
+    "nodemon": "^2.0.4",
+    "shortid": "^2.2.15"
+  }
+}
