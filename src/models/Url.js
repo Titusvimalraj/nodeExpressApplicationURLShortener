@@ -13,6 +13,10 @@ const urlSchema = new mongoose.Schema({
   url: {
     type: String,
     default: ''
+  },
+  shortUrl:{
+    type: String,
+    default: ''
   }
 });
 

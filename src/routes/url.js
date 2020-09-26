@@ -32,9 +32,35 @@ router.post('/urls', async (req, res) => {
 
   try {
     const urlId = shortid.generate();
-    const url_ = new Url({ urlId, userId: req.user._id,url });
+    const shortUrl = process.env.APPURL? `${process.env.APPURL}/${urlId}`:`http://localhost:3000/${urlId}`;
+    const url_ = new Url({ urlId, userId: req.user._id,url, shortUrl});
     await url_.save();
     res.send(url_);
+  } catch (err) {
+    res.status(422).send({ error: err.message });
+  }
+});
+
+
+router.delete('/:urlId', async (req, res) => {
+  const urlId = req.params.urlId;
+
+  if (!urlId) {
+    return res
+      .status(422)
+      .send({ error: 'You must provide a urlId parameter in body' });
+  }
+
+  try {   
+    
+    const mess = await Url.findOneAndRemove({ urlId: req.params.urlId });
+    if(!mess){
+      return res
+      .status(404)
+      .send({ error: 'Provided short url not found' });
+    }
+    res.send({message:'Deleted the Url Successfully',serverMessage:mess});
+
   } catch (err) {
     res.status(422).send({ error: err.message });
   }

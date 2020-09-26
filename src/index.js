@@ -33,7 +33,7 @@ mongoose.connection.on('error', err => {
 
 
 app.get("/", function (req, res) {
-  res.redirect('https://documenter.getpostman.com/view/7987415/TVK8aKpq');
+  res.redirect('https://documenter.getpostman.com/view/7987415/TVKHUFWo');
   let apiResponse = {message:'route not available in the application, params not proper or missing', error:'Server Error', status:404};
   res.status(500).json(apiResponse);
 })
