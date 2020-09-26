@@ -7,6 +7,17 @@ const Url = mongoose.model('Url');
 
 const router = express.Router();
 
+router.get('/:urlId', async (req, res) => {
+  try {
+    const urls = await Url.find({ urlId: req.params.urlId });  
+    res.redirect(urls[0].url);
+  } catch (error) {
+    return res
+    .status(404)
+    .send({ error: 'Provided short url not found' });  
+  }
+});
+
 router.use(requireAuth);
 
 router.get('/urls', async (req, res) => {
@@ -15,11 +26,7 @@ router.get('/urls', async (req, res) => {
   res.send(urls);
 });
 
-router.get('/:urlId', async (req, res) => {
-  const urls = await Url.find({ urlId: req.params.urlId });
 
-  res.redirect(urls[0].url);
-});
 
 router.post('/urls', async (req, res) => {
   const { url } = req.body;

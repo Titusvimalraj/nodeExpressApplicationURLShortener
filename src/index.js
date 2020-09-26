@@ -10,6 +10,11 @@ const requireAuth = require('./middlewares/requireAuth');
 const app = express();
 
 app.use(bodyParser.json());
+app.get("/", function (req, res) {
+  res.redirect('https://documenter.getpostman.com/view/7987415/TVKHUFWo');
+  let apiResponse = {message:'route not available in the application, params not proper or missing', error:'Server Error', status:404};
+  res.status(500).json(apiResponse);
+});
 app.use(authRoutes);
 app.use(urlRoutes);
 
@@ -32,11 +37,6 @@ mongoose.connection.on('error', err => {
 });
 
 
-app.get("/", function (req, res) {
-  res.redirect('https://documenter.getpostman.com/view/7987415/TVKHUFWo');
-  let apiResponse = {message:'route not available in the application, params not proper or missing', error:'Server Error', status:404};
-  res.status(500).json(apiResponse);
-})
 
 
 app.listen(process.env.PORT || 3000, () => {
