@@ -15,7 +15,7 @@ router.post('/signup', async (req, res) => {
     const token = jwt.sign({ userId: user._id }, 'Poradalaam');
     res.send({ token });
   } catch (err) {
-    return res.status(422).send({message:"unable to signup or please login if you already have an account with us", error:err.message});
+    return res.status(422).send({ message: "unable to signup or please login if you already have an account with us", error: err.message });
   }
 });
 

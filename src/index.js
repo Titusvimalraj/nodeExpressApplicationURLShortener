@@ -3,16 +3,17 @@ require('./models/Url');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const urlRoutes = require('./routes/url');
 const requireAuth = require('./middlewares/requireAuth');
 
 const app = express();
-
+app.use(cors());
 app.use(bodyParser.json());
 app.get("/", function (req, res) {
   res.redirect('https://documenter.getpostman.com/view/7987415/TVKHUFWo');
-  let apiResponse = {message:'route not available in the application, params not proper or missing', error:'Server Error', status:404};
+  let apiResponse = { message: 'route not available in the application, params not proper or missing', error: 'Server Error', status: 404 };
   res.status(500).json(apiResponse);
 });
 app.use(authRoutes);
