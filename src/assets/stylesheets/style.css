@@ -1,0 +1,19 @@
+html {
+	height: 100%;
+}
+
+body {
+	min-height: 100%;
+}
+
+.container-fluid {
+	height: 100vmin;
+}
+
+.row {
+	height: 100%;
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

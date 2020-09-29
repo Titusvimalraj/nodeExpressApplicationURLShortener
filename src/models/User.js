@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const mailer = require('nodemailer');
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -10,10 +11,18 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  verified: {
+    type: Boolean,
+    default: false
+  },
+  reset: {
+    type: Boolean,
+    default: false
   }
 });
 
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
   const user = this;
   if (!user.isModified('password')) {
     return next();
@@ -28,13 +37,14 @@ userSchema.pre('save', function(next) {
       if (err) {
         return next(err);
       }
+
       user.password = hash;
       next();
     });
   });
 });
 
-userSchema.methods.comparePassword = function(candidatePassword) {
+userSchema.methods.comparePassword = function (candidatePassword) {
   const user = this;
 
   return new Promise((resolve, reject) => {

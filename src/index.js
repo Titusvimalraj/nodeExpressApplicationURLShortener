@@ -1,16 +1,23 @@
 require('./models/User');
 require('./models/Url');
 const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const urlRoutes = require('./routes/url');
-const requireAuth = require('./middlewares/requireAuth');
 
 const app = express();
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
 app.use(cors());
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'assets')));
+
 app.get("/", function (req, res) {
   res.redirect('https://documenter.getpostman.com/view/7987415/TVKHUFWo');
   let apiResponse = { message: 'route not available in the application, params not proper or missing', error: 'Server Error', status: 404 };
