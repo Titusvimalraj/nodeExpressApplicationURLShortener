@@ -92,7 +92,7 @@ router.post('/signup', async (req, res) => {
       to: `${user.email}`, // list of receivers
       subject: "Welcome to uriShorty, Email Verification", // Subject line
       text: "How are you doing? Thanks for Signing up", // plain text body
-      html: `<b>Click on below uri to verify your email address</b><br/> <a href="${process.env.APPURL || 'http://localhost:3000'}/verify/${user._id}">Verify</a>`, // html body
+      html: `<b>Click on below uri to verify your email address</b><br/> <a href="${serverBaseURL}/verify/${user._id}">Verify</a>`, // html body
     });
     res.send({ token });
   } catch (err) {
@@ -144,7 +144,7 @@ router.post('/forgotPassword', async (req, res) => {
       to: `${email}`, // list of receivers
       subject: "Welcome to uriShorty, Reset Password", // Subject line
       text: "How are you doing? Thanks for Signing up Please", // plain text body
-      html: `<b>Click on below uri to reset your password</b><br/><a href="${process.env.APPURL || 'http://localhost:3000'}/forgotPassword?email=${email}&token=${token}">Reset Password</a>
+      html: `<b>Click on below uri to reset your password</b><br/><a href="${serverBaseURL}/forgotPassword?email=${email}&token=${token}">Reset Password</a>
       <p>This Link will get expired in 10 minutes</p>
       `, // html body
     });
