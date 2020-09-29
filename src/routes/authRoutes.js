@@ -9,6 +9,7 @@ const resetPassAuth = require('../middlewares/resetPassAuth');
 const router = express.Router();
 const clientUrl = process.env.CLIENT_URI || 'http://localhost:3000';
 const serverBaseURL = process.env.APPURL || 'http://localhost:3000';
+const mailPassword = process.env.MAIL_PASS;
 
 router.get('/forgotPassword', async (req, res) => {
   const { email, token } = req.query;
@@ -61,7 +62,7 @@ router.post('/signup', async (req, res) => {
       service: 'gmail',
       auth: {
         user: 'urishorty.heroku@gmail.com',
-        pass: process.env.MAIL_PASS
+        pass: mailPassword
       }
     });
 
@@ -120,7 +121,7 @@ router.post('/forgotPassword', async (req, res) => {
       service: 'gmail',
       auth: {
         user: 'urishorty.heroku@gmail.com',
-        pass: process.env.MAIL_PASS
+        pass: mailPassword
       }
     });
 
