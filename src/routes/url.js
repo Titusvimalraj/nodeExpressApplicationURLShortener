@@ -21,42 +21,54 @@ router.get('/s/:urlId', async (req, res) => {
 router.use(requireAuth);
 
 router.get('/urls', async (req, res) => {
-  const urls = await Url.find({ userId: req.user._id });
+  try {
+    const urls = await Url.find({ userId: req.user._id });
 
-  res.send(urls);
+    res.send(urls);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+
 });
 
 router.get("/url/dashboard", async (req, res) => {
-  const urls = await Url.aggregate([
-    {
-      '$match': {
-        'userId': req.user._id
-      }
-    }, {
-      '$project': {
-        'year': {
-          '$year': '$createdAt'
-        },
-        'month': {
-          '$month': '$createdAt'
-        },
-        'day': {
-          '$dayOfMonth': '$createdAt'
+  try {
+    const urls = await Url.aggregate([
+      {
+        '$match': {
+          'userId': req.user._id
+        }
+      }, {
+        '$project': {
+          'year': {
+            '$year': '$createdAt'
+          },
+          'month': {
+            '$month': '$createdAt'
+          },
+          'day': {
+            '$dayOfMonth': '$createdAt'
+          }
+        }
+      }, {
+        '$group': {
+          '_id': {
+            'year': '$year',
+            'month': '$month',
+            'day': '$day'
+          },
+          'count': {
+            '$sum': 1
+          }
         }
       }
-    }, {
-      '$group': {
-        '_id': {
-          'year': '$year',
-          'month': '$month',
-          'day': '$day'
-        },
-        'count': {
-          '$sum': 1
-        }
-      }
-    }
-  ]);
+    ]);
+
+    res.send(urls);
+
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 });
 
 
