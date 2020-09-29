@@ -1,3 +1,4 @@
+require('dotenv').config()
 require('./models/User');
 require('./models/Url');
 const express = require('express');
@@ -8,7 +9,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const urlRoutes = require('./routes/url');
-
 const app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

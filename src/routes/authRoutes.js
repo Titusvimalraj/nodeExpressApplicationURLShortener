@@ -7,9 +7,38 @@ const bcrypt = require('bcrypt');
 const verifyJWT = require('../middlewares/resetPassAuth');
 const resetPassAuth = require('../middlewares/resetPassAuth');
 const router = express.Router();
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
 const clientUrl = process.env.CLIENT_URI || 'http://localhost:3000';
 const serverBaseURL = process.env.APPURL || 'http://localhost:3000';
 const mailPassword = process.env.MAIL_PASS;
+const clientID = process.env.CLIENT_ID;
+const clientSecret = process.env.CLIENT_SECRET;
+const refreshToken = process.env.REFRESH_TOKEN;
+const uriShortyEmail_ID = process.env.MAIL_ID;
+
+const oauth2Client = new OAuth2(
+  clientID,
+  clientSecret,
+  "https://developers.google.com/oauthplayground" // Redirect URL
+);
+
+oauth2Client.setCredentials({
+  refresh_token: refreshToken
+});
+const accessToken = oauth2Client.getAccessToken()
+
+const transporter = mailer.createTransport({
+  service: 'gmail',
+  auth: {
+    type: "OAuth2",
+    user: uriShortyEmail_ID,
+    clientId: clientID,
+    clientSecret: clientSecret,
+    refreshToken: refreshToken,
+    accessToken: accessToken
+  }
+});
 
 router.get('/forgotPassword', async (req, res) => {
   const { email, token } = req.query;
@@ -57,14 +86,6 @@ router.post('/signup', async (req, res) => {
     await user.save();
 
     const token = jwt.sign({ userId: user._id }, process.env.SIGN_SECRET || 'Poradalam');
-
-    let transporter = mailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'urishorty.heroku@gmail.com',
-        pass: mailPassword
-      }
-    });
 
     const info = await transporter.sendMail({
       from: '"uriShorty" <urishorty.heroku@gmail.com>', // sender address
@@ -117,13 +138,6 @@ router.post('/forgotPassword', async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, process.env.RESET_SECRET || 'Theriyala', { expiresIn: 60 * 10 });
 
-    let transporter = mailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'urishorty.heroku@gmail.com',
-        pass: mailPassword
-      }
-    });
 
     const info = await transporter.sendMail({
       from: '"uriShorty" <urishorty.heroku@gmail.com>', // sender address
