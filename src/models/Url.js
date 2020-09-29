@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const urlSchema = new mongoose.Schema({
-  urlId:{
+  urlId: {
     type: String,
     index: true,
     unique: true
@@ -14,9 +14,13 @@ const urlSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-  shortUrl:{
+  shortUrl: {
     type: String,
     default: ''
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now()
   }
 });
 
