@@ -7,14 +7,14 @@ const Url = mongoose.model('Url');
 
 const router = express.Router();
 
-router.get('/:urlId', async (req, res) => {
+router.get('/s/:urlId', async (req, res) => {
   try {
-    const urls = await Url.find({ urlId: req.params.urlId });  
+    const urls = await Url.find({ urlId: req.params.urlId });
     res.redirect(urls[0].url);
   } catch (error) {
     return res
-    .status(404)
-    .send({ error: 'Provided short url not found' });  
+      .status(404)
+      .send({ error: 'Provided short url not found' });
   }
 });
 
@@ -24,6 +24,39 @@ router.get('/urls', async (req, res) => {
   const urls = await Url.find({ userId: req.user._id });
 
   res.send(urls);
+});
+
+router.get("/url/dashboard", async (req, res) => {
+  const urls = await Url.aggregate([
+    {
+      '$match': {
+        'userId': req.user._id
+      }
+    }, {
+      '$project': {
+        'year': {
+          '$year': '$createdAt'
+        },
+        'month': {
+          '$month': '$createdAt'
+        },
+        'day': {
+          '$dayOfMonth': '$createdAt'
+        }
+      }
+    }, {
+      '$group': {
+        '_id': {
+          'year': '$year',
+          'month': '$month',
+          'day': '$day'
+        },
+        'count': {
+          '$sum': 1
+        }
+      }
+    }
+  ]);
 });
 
 
@@ -39,8 +72,8 @@ router.post('/urls', async (req, res) => {
 
   try {
     const urlId = shortid.generate();
-    const shortUrl = process.env.APPURL ? `${process.env.APPURL}/${urlId}`:`http://localhost:3000/${urlId}`;
-    const url_ = new Url({ urlId, userId: req.user._id,url, shortUrl});
+    const shortUrl = process.env.APPURL ? `${process.env.APPURL}/s/${urlId}` : `http://localhost:3000/s/${urlId}`;
+    const url_ = new Url({ urlId, userId: req.user._id, url, shortUrl });
     await url_.save();
     res.send(url_);
   } catch (err) {
@@ -58,15 +91,15 @@ router.delete('/:urlId', async (req, res) => {
       .send({ error: 'You must provide a urlId parameter in body' });
   }
 
-  try {   
-    
+  try {
+
     const mess = await Url.findOneAndRemove({ urlId: req.params.urlId });
-    if(!mess){
+    if (!mess) {
       return res
-      .status(404)
-      .send({ error: 'Provided short url not found' });
+        .status(404)
+        .send({ error: 'Provided short url not found' });
     }
-    res.send({message:'Deleted the Url Successfully',serverMessage:mess});
+    res.send({ message: 'Deleted the Url Successfully', serverMessage: mess });
 
   } catch (err) {
     res.status(422).send({ error: err.message });
