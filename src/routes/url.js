@@ -48,7 +48,8 @@ router.get("/url/dashboard", async (req, res) => {
           },
           'day': {
             '$dayOfMonth': '$createdAt'
-          }
+          },
+          'urls': '$shortUrl'
         }
       }, {
         '$group': {
@@ -59,6 +60,9 @@ router.get("/url/dashboard", async (req, res) => {
           },
           'count': {
             '$sum': 1
+          },
+          'urls': {
+            '$push': '$urls'
           }
         }
       }
